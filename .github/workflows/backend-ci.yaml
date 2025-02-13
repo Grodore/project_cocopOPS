@@ -1,0 +1,64 @@
+name: Build and Push Backend Docker Image
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build the Docker image
+        run: |
+          cd backend
+          docker build -f Dockerfile.advancedv2 -t ghcr.io/mathieu-junia/backend:${{ github.sha }} -t ghcr.io/mathieu-junia/backend:latest .
+
+      - name: Install and run Container Structure Tests
+        run: |
+          curl -LO https://github.com/GoogleContainerTools/container-structure-test/releases/latest/download/container-structure-test-linux-amd64
+          chmod +x container-structure-test-linux-amd64
+          mkdir -p $HOME/bin
+          export PATH=$PATH:$HOME/bin
+          mv container-structure-test-linux-amd64 $HOME/bin/container-structure-test
+          cd backend
+          container-structure-test test --image ghcr.io/mathieu-junia/backend:${{ github.sha }} --config tests/cst-advancedv2.yaml
+
+      - name: Log in to the registry
+        run: docker login ghcr.io -u ${{ secrets.GITHUB_TOKEN }} -p ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Install Syft
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+          syft ghcr.io/mathieu-junia/backend:${{ github.sha }} -o spdx-json=sbom-backend.json
+          ls
+
+      - name: Install Grype
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+          grype sbom:./sbom-backend.json -o cyclonedx-json=cve-backend.json
+          ls
+
+      - name: Push the Docker image
+        run: |
+          docker push ghcr.io/mathieu-junia/backend:${{ github.sha }}
+          docker push ghcr.io/mathieu-junia/backend:latest
+
+      - name: Install ORAS
+        run: |
+          VERSION="1.2.2"
+          curl -LO "https://github.com/oras-project/oras/releases/download/v${VERSION}/oras_${VERSION}_linux_amd64.tar.gz"
+          mkdir -p oras-install/
+          tar -zxf oras_${VERSION}_*.tar.gz -C oras-install/
+          sudo mv oras-install/oras /usr/local/bin/
+          rm -rf oras_${VERSION}_*.tar.gz oras-install/
+
+      - name: Attach files to an existing artifact with ORAS
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | oras login ghcr.io -u ${{ secrets.GITHUB_TOKEN }} --password-stdin
+          oras push ghcr.io/mathieu-junia/backend/artifact:sbom-${{ github.sha }} --artifact-type example/sbom sbom-backend.json
+          oras push ghcr.io/mathieu-junia/backend/artifact:cve-${{ github.sha }} --artifact-type example/cve cve-backend.json
+
