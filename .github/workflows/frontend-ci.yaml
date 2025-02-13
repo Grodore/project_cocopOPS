@@ -14,7 +14,7 @@ jobs:
       - name: Build the Docker image
         run: |
           cd frontend
-          docker build -f Dockerfile.advancedv2 -t ghcr.io/mathieu-junia/frontend:${{ github.sha }} -t ghcr.io/mathieu-junia/frontend:latest .
+          docker build -f Dockerfile.advancedv2 -t ghcr.io/Grodore/frontend:${{ github.sha }} -t ghcr.io/Grodore/frontend:latest .
 
       - name: Install and run Container Structure Tests
         run: |
@@ -24,12 +24,12 @@ jobs:
           export PATH=$PATH:$HOME/bin
           mv container-structure-test-linux-amd64 $HOME/bin/container-structure-test
           cd frontend
-          container-structure-test test --image ghcr.io/mathieu-junia/frontend:${{ github.sha }} --config tests/cst-advancedv2.yaml
+          container-structure-test test --image ghcr.io/Grodore/frontend:${{ github.sha }} --config tests/cst-advancedv2.yaml
 
       - name: Log in to the registry
         run: docker login ghcr.io -u ${{ secrets.GITHUB_TOKEN }} -p ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push the Docker image
         run: |
-          docker push ghcr.io/mathieu-junia/frontend:${{ github.sha }}
-          docker push ghcr.io/mathieu-junia/frontend:latest
+          docker push ghcr.io/Grodore/frontend:${{ github.sha }}
+          docker push ghcr.io/Grodore/frontend:latest

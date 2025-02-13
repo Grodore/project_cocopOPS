@@ -24,5 +24,5 @@ grype:
 
 # syft frontend:0.0.1 -o spdx-json=sbom-back-0.0.5.json
 # grype sbom:./sbom/sbom.json
-# oras discover ghcr.io/mathieu-junia/backend/artifact:cve --format tree
-# oras pull ghcr.io/mathieu-junia/backend/artifact:cve
+# oras discover ghcr.io/Grodore/backend/artifact:cve --format tree
+# oras pull ghcr.io/Grodore/backend/artifact:cve
