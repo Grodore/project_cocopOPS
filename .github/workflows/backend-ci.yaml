@@ -61,4 +61,3 @@ jobs:
           echo ${{ secrets.GITHUB_TOKEN }} | oras login ghcr.io -u ${{ secrets.GITHUB_TOKEN }} --password-stdin
           oras push ghcr.io/mathieu-junia/backend/artifact:sbom-${{ github.sha }} --artifact-type example/sbom sbom-backend.json
           oras push ghcr.io/mathieu-junia/backend/artifact:cve-${{ github.sha }} --artifact-type example/cve cve-backend.json
-

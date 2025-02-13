@@ -28,4 +28,3 @@ EXPOSE 8501
 # Let's be specific about which python we'll use.
 # Note that we do not have uv anymore in this stage !
 CMD ["/.venv/bin/python3.12", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-

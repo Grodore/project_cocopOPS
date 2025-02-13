@@ -1,8 +1,9 @@
-from fastapi import APIRouter, status
-from pydantic import BaseModel, Field
+from pathlib import Path
+
 import numpy as np
 import onnxruntime as rt
-from pathlib import Path
+from fastapi import APIRouter, status
+from pydantic import BaseModel, Field
 
 router = APIRouter(prefix="/v1")
 
@@ -33,7 +34,6 @@ class InferenceOut(Inference):
 
 
 class Predictor:
-
     def __init__(self, model_path: str):
         self.model_path = model_path
         self.session = self._load_model()
@@ -100,5 +100,4 @@ model = Predictor(model_path="../models/svc_iris.onnx")
     summary="Simple predictions with an ONNX model.",
 )
 def chat(features: InferenceIn):
-
     return model.predict(features=features)
