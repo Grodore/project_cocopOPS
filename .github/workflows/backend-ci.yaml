@@ -14,7 +14,7 @@ jobs:
       - name: Build the Docker image
         run: |
           cd backend
-          docker build -f Dockerfile.advancedv2 -t ghcr.io/Grodore/backend:${{ github.sha }} -t ghcr.io/Grodore/backend:latest .
+          docker build -f Dockerfile.advancedv2 -t ghcr.io/grodore/backend:${{ github.sha }} -t ghcr.io/grodore/backend:latest .
 
       - name: Install and run Container Structure Tests
         run: |
@@ -24,7 +24,7 @@ jobs:
           export PATH=$PATH:$HOME/bin
           mv container-structure-test-linux-amd64 $HOME/bin/container-structure-test
           cd backend
-          container-structure-test test --image ghcr.io/Grodore/backend:${{ github.sha }} --config tests/cst-advancedv2.yaml
+          container-structure-test test --image ghcr.io/grodore/backend:${{ github.sha }} --config tests/cst-advancedv2.yaml
 
       - name: Log in to the registry
         run: docker login ghcr.io -u ${{ secrets.GITHUB_TOKEN }} -p ${{ secrets.GITHUB_TOKEN }}
@@ -33,7 +33,7 @@ jobs:
       - name: Install Syft
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-          syft ghcr.io/Grodore/backend:${{ github.sha }} -o spdx-json=sbom-backend.json
+          syft ghcr.io/grodore/backend:${{ github.sha }} -o spdx-json=sbom-backend.json
           ls
 
       - name: Install Grype
@@ -44,8 +44,8 @@ jobs:
 
       - name: Push the Docker image
         run: |
-          docker push ghcr.io/Grodore/backend:${{ github.sha }}
-          docker push ghcr.io/Grodore/backend:latest
+          docker push ghcr.io/grodore/backend:${{ github.sha }}
+          docker push ghcr.io/grodore/backend:latest
 
       - name: Install ORAS
         run: |
@@ -59,5 +59,5 @@ jobs:
       - name: Attach files to an existing artifact with ORAS
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | oras login ghcr.io -u ${{ secrets.GITHUB_TOKEN }} --password-stdin
-          oras push ghcr.io/Grodore/backend/artifact:sbom-${{ github.sha }} --artifact-type example/sbom sbom-backend.json
-          oras push ghcr.io/Grodore/backend/artifact:cve-${{ github.sha }} --artifact-type example/cve cve-backend.json
+          oras push ghcr.io/grodore/backend/artifact:sbom-${{ github.sha }} --artifact-type example/sbom sbom-backend.json
+          oras push ghcr.io/grodore/backend/artifact:cve-${{ github.sha }} --artifact-type example/cve cve-backend.json
