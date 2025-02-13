@@ -1,7 +1,7 @@
 ---
 services:
   backend:
-    image: ghcr.io/mathieu-junia/backend:latest
+    image: ghcr.io/Grodore/backend:latest
     container_name: backend
     ports:
       - 8000:8000
@@ -14,7 +14,7 @@ services:
       - backend-ollama
 
   frontend:
-    image: ghcr.io/mathieu-junia/frontend:latest
+    image: ghcr.io/Grodore/frontend:latest
     container_name: frontend
     ports:
       - 8501:8501
