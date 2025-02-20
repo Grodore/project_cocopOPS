@@ -1,9 +1,9 @@
+import logging
 from typing import Annotated
 
 import httpx
 from config.schemas import Chat, OllamaConfig, PromptIn, PromptOut
 from fastapi import APIRouter, Body, status
-import logging
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

@@ -88,6 +88,7 @@ class Predictor:
             InferenceOut(predicted_class=k, probability=v) for k, v in classes.items()
         ]
 
+
 # pas modifié ce matin (20/02/2025)
 model = Predictor(model_path="../models/svc_iris.onnx")
 

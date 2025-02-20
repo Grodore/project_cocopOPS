@@ -1,5 +1,5 @@
 from fastapi import FastAPI, status
-from routes import inference, WPT
+from routes import WPT, inference
 from starlette.responses import RedirectResponse
 
 app = FastAPI(title="WPT", version="1.0.0")
@@ -7,6 +7,7 @@ app = FastAPI(title="WPT", version="1.0.0")
 
 app.include_router(WPT.router)
 app.include_router(inference.router)
+
 
 @app.get(
     "/",
