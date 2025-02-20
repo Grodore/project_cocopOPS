@@ -56,7 +56,7 @@ commandTests:
       command: pip
       args: [--version]
       expectedOutput:
-        - regex: "pip (2[1-9]|[3-9][0-9])\\..*"
+        - "pip (2[1-9]|[3-9][0-9])\\..*"
     - name: check application start
       command: python
       args: [main.py]
