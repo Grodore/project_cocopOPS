@@ -3,7 +3,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile.chisel.full
+      dockerfile: Dockerfile.advancedv2
     container_name: backend
     ports:
       - 8000:8000
@@ -18,7 +18,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.chisel.full
+      dockerfile: Dockerfile.advancedv2
     container_name: frontend
     ports:
       - 8501:8501
@@ -33,7 +33,6 @@ services:
     image: ollama/ollama:latest
     container_name: ollama
     ports:
-      # the port 11434 might already be in use on your laptop, change it for 11435
       - 11435:11434
     volumes:
       - ./ollama/ollama:/root/.ollama
