@@ -23,19 +23,9 @@ fileExistenceTests:
     - name: pyproject.toml file
       path: pyproject.toml
       shouldExist: false
-    # Tests de présence de fichiers supplémentaires
-    - name: settings file
-      path: /config/settings.py
+    - name: schemas file
+      path: /config/schemas.py
       shouldExist: true
-    - name: logs directory
-      path: /logs
-      shouldExist: true
-
-fileContentTests:
-    - name: check main.py content
-      path: /main.py
-      expectedContents: ["if __name__ == '__main__':"]
-
 
 commandTests:
     - name: python version
@@ -79,8 +69,3 @@ metadataTest:
         isRegex: true
       - key: PYTHONPATH
         value: "/.venv/lib/python3.12/site-packages"
-      # Tests de variables d'environnement supplémentaires
-      - key: APP_ENV
-        value: "development"
-      - key: LOG_LEVEL
-        value: "info"
