@@ -23,7 +23,26 @@ fileExistenceTests:
     - name: pyproject.toml file
       path: pyproject.toml
       shouldExist: false
+    # Tests de présence de fichiers supplémentaires
+    - name: settings file
+      path: /config/settings.py
+      shouldExist: true
+    - name: logs directory
+      path: /logs
+      shouldExist: true
 
+fileContentTests:
+    - name: check main.py content
+      path: /main.py
+      expectedContents: ["if __name__ == '__main__':"]
+
+fileModeTests:
+    - name: check config directory permissions
+      path: /config
+      expectedMode: "755"
+    - name: check main.py permissions
+      path: /main.py
+      expectedMode: "644"
 
 commandTests:
     - name: python version
@@ -45,6 +64,15 @@ commandTests:
       command: id
       args: [-g]
       expectedOutput: [65532]
+    # Tests de commandes supplémentaires
+    - name: check pip version
+      command: pip
+      args: [--version]
+      expectedOutput: [pip 21.*]
+    - name: check application start
+      command: python
+      args: [main.py]
+      expectedOutput: ["Application started"]
 
 metadataTest:
     exposedPorts: ["8501"]
@@ -54,3 +82,8 @@ metadataTest:
         isRegex: true
       - key: PYTHONPATH
         value: "/.venv/lib/python3.12/site-packages"
+      # Tests de variables d'environnement supplémentaires
+      - key: APP_ENV
+        value: "development"
+      - key: LOG_LEVEL
+        value: "info"
