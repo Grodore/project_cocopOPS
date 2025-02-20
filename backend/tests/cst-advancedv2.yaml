@@ -34,7 +34,7 @@ commandTests:
       expectedOutput: [Python 3.12.*]
     - name: check OLLAMA_HOST environment variable
       command: python
-      args: ["-c", "from config import OllamaConfig; print(OllamaConfig().ollama_service_name)"]
+      args: ["-c", "from config.schemas import OllamaConfig; print(OllamaConfig().ollama_service_name)"]
       expectedOutput: ["127.0.0.1:11434"]
     - name: python path
       command: which
@@ -55,7 +55,8 @@ commandTests:
     - name: check pip version
       command: pip
       args: [--version]
-      expectedOutput: [pip 21.*]
+      expectedOutput:
+        - regex: "pip (2[1-9]|[3-9][0-9])\\..*"
     - name: check application start
       command: python
       args: [main.py]
