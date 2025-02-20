@@ -3,6 +3,11 @@ from typing import Annotated
 import httpx
 from config.schemas import Chat, OllamaConfig, PromptIn, PromptOut
 from fastapi import APIRouter, Body, status
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/v1")
 
@@ -97,11 +102,17 @@ def chat(
     model: str,
     temperature: float,
 ):
+    logger.info(f"Received prompts: {prompts}")
+    logger.info(f"Model: {model}, Temperature: {temperature}")
+
     messages = [{"role": prompt.role, "content": prompt.content} for prompt in prompts]
 
     chat = Chat(model=model, temperature=temperature, messages=messages)
 
     response = client.post(chat=chat)
+
+    logger.info(f"Response status code: {response.status_code}")
+    logger.info(f"Response content: {response.content}")
 
     message = response.json()["message"]["content"]
 

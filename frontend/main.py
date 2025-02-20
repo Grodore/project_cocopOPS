@@ -42,7 +42,7 @@ if prompt := st.chat_input("What is your question?", key="user_prompt"):
 
     with st.chat_message("assistant"):
         chat = Chat(
-            model="phi4",
+            model="tinyllama",
             temperature=temperature,
             messages=st.session_state.messages,
         )

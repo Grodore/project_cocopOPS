@@ -1,6 +1,11 @@
 import httpx
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class Chat(BaseModel):
@@ -55,22 +60,29 @@ class LLMClient:
         """POST request."""
         headers, body, route = self._generate_request(chat=chat)
 
+        logger.info(f"Sending POST request to {route}")
+        logger.info(f"Headers: {headers}")
+        logger.info(f"Body: {body}")
+
         try:
             response = self.client.post(
                 url=route,
                 headers=headers,
                 json=body,
-                timeout=180.0,
+                timeout=300.0,
             )
             response.raise_for_status()
         except httpx.RequestError as exc:
-            print(f"An error occurred while requesting {exc.request.url!r}.")
+            logger.error(f"An error occurred while requesting {exc.request.url!r}.")
             raise
         except httpx.HTTPStatusError as exc:
-            print(
+            logger.error(
                 f"Error response {exc.response.status_code} while requesting {exc.request.url!r}."
             )
             raise
+
+        logger.info(f"Response status code: {response.status_code}")
+        logger.info(f"Response content: {response.content}")
 
         return response
 

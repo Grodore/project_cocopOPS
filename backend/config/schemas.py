@@ -42,6 +42,7 @@ class Chat(BaseModel):
 
 class OllamaConfig(BaseSettings):
     ollama_service_name: str = Field(
-        alias="OLLAMA_SERVICE_NAME",
-        default="0.0.0.0:11434",
+        alias="OLLAMA_HOST",
+        #default="0.0.0.0":11434",
+        default="127.0.0.1:11434",
     )
